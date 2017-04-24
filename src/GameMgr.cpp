@@ -2,6 +2,7 @@
 #include <Engine.h>
 
 #include <Player.h>
+#include <Enemy.h>
 
 GameMgr::GameMgr(Engine* newEngine)
     : Mgr(newEngine)
@@ -63,7 +64,12 @@ void GameMgr::createPlayer()
 {
 	// Create player entity
     EntityMgr* entityMgr = engine->entityMgr;
-	player = entityMgr->createEntity(new Player());
+	player = entityMgr->createEntity(new Player(engine));
+
+	// Create test enemy
+	Entity* enemy = entityMgr->createEntity(new Enemy(engine), Ogre::Vector3(0, 0, 5000));
+	enemy->ogreSceneNode->scale(5, 5, 5);
+
 
 	// Create position plane
 	positionPlane = Ogre::Plane(Ogre::Vector3::NEGATIVE_UNIT_Z, 0);
@@ -77,7 +83,7 @@ void GameMgr::createPlayer()
 	posPlaneSceneNode->attachObject(posPlaneEnt);
 	posPlaneEnt->setMaterialName("Examples/GrassFloor");
 	posPlaneSceneNode->setPosition(0, 0, 0);
-	//posPlaneEnt->setVisible(false);
+	posPlaneEnt->setVisible(false);
 
 	// Create aim plane
 	aimPlane = Ogre::Plane(Ogre::Vector3::NEGATIVE_UNIT_Z, 0);
@@ -91,5 +97,5 @@ void GameMgr::createPlayer()
 	aimPlaneSceneNode->attachObject(aimPlaneEnt);
 	aimPlaneEnt->setMaterialName("Examples/GrassFloor");
 	aimPlaneSceneNode->setPosition(0, 0, 5000);
-	//aimPlaneEnt->setVisible(false);
+	aimPlaneEnt->setVisible(false);
 }

@@ -23,9 +23,6 @@ public:
     virtual void tick(float newDeltaTime);
 
 private:
-    virtual void updateSpeed();
-    virtual void updateHeading();
-    virtual void updateVelocity();
     virtual void updatePosition();
 
     float deltaTime;

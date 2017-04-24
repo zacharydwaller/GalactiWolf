@@ -6,16 +6,22 @@
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
 
+#include <Engine.h>
+
 class Aspect;
 class UnitAI;
 
 class Entity
 {
 public:
-	Entity();
+	Entity(Engine* newEngine);
     virtual ~Entity();
 
     virtual void tick(float deltaTime);
+
+	virtual void update(float deltaTime) = 0;
+
+	virtual void lookAt(Ogre::Vector3 lookAtPos);
 
     virtual void moveTo(Ogre::Vector3 location, bool addToCommandList = false);
     virtual void follow(Entity* target, bool addToCommandList = false);
@@ -36,13 +42,15 @@ public:
 
     // Ogre
     Ogre::Vector3 position;
-	Ogre::Quaternion orientation;
+	Ogre::Vector3 rotation;
     Ogre::Vector3 velocity;
     Ogre::SceneNode* ogreSceneNode;
     Ogre::Entity* ogreEntity;
 
     std::list<Aspect*>* aspects;
     UnitAI* unitAI;
+
+	Engine* engine;
 
 private:
     static unsigned int nextId;

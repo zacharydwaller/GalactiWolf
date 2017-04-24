@@ -2,7 +2,7 @@
 #include <Entity.h>
 #include <Engine.h>
 
-#include <Vector3Extensions.h>
+#include <Utils.h>
 
 InputMgr::InputMgr(Engine* newEngine)
     : Mgr(newEngine),
@@ -45,6 +45,11 @@ bool InputMgr::tick(float deltaTime)
         return false;
     }
 
+	//if(mouse->getMouseState().buttonDown(OIS::MB_Left))
+	{
+		//engine->gameMgr->player->rotation.x += 180;
+	}
+
 	/*
     if (keyboard->isKeyDown(OIS::KC_TAB) && !tabDownLastFrame)
     {
@@ -76,10 +81,7 @@ bool InputMgr::tick(float deltaTime)
     
 	*/
 
-	controlShip(deltaTime);
 	controlCamera(deltaTime);
-
-	std::cout << "Test" << std::endl;
 
     return true;
 }
@@ -153,44 +155,6 @@ void InputMgr::rotateCamera(float yaw, float pitch)
     camera->pitch(Ogre::Radian(pitch));
 }
 
-void InputMgr::controlShip(float deltaTime)
-{
-    Entity* player= engine->gameMgr->player;
-	Ogre::Vector3 posLocation = raycastToPlane(engine->gameMgr->positionPlane);
-	Ogre::Vector3 aimLocation = raycastToPlane(engine->gameMgr->aimPlane);
-	Ogre::Vector3 aimDiff = aimLocation - player->position;
-    
-	player->position = Vector3::lerp(player->position, posLocation, 0.01f);
-
-	//player->ogreSceneNode->lookAt(aimLocation, Ogre::Node::TS_WORLD, Ogre::Vector3::UNIT_Y);
-	//player->ogreSceneNode->yaw(aimDiff.angleBetween(Ogre::Vector3::UNIT_Z));
-	//player->orientation = player->ogreSceneNode->getOrientation();
-}
-
-void InputMgr::processLeftClick()
-{
-    Entity* newSelected = raycastToEntity();
-    
-    if (newSelected == NULL) return;
-
-    engine->entityMgr->selectEntity(newSelected);
-}
-
-void InputMgr::processRightClick()
-{
-    Entity* targetEntity = raycastToEntity();
-    //Ogre::Vector3 targetLocation = raycastToGround();
-    bool addToList = keyboard->isKeyDown(OIS::KC_LSHIFT);
-
-    if (targetEntity != NULL)
-    {
-        engine->entityMgr->getSelectedEntity()->follow(targetEntity, addToList);
-    }
-    else
-    {
-        //engine->entityMgr->getSelectedEntity()->moveTo(targetLocation, addToList);
-    }
-}
 
 Entity* InputMgr::raycastToEntity()
 {

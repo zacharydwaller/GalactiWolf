@@ -1,14 +1,8 @@
-/*
-* Utils.h
-*
-*  Created on: Feb 22, 2017
-*      Author: sushil
-*/
-
 #ifndef UTILS_H_
 #define UTILS_H_
 
 #include <OgreMath.h>
+#include <OgreVector3.h>
 
 namespace Utils
 {
@@ -47,6 +41,11 @@ namespace Utils
     {
         return MakeAnglePosNeg(angle1 - angle2);
     }
+
+	inline Ogre::Vector3 lerp(Ogre::Vector3 start, Ogre::Vector3 end, float t)
+	{
+		return ((1 - t) * start) + (t * end);
+	}
 } /* namespace Utils */
 
 #endif /* UTILS_H_ */

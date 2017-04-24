@@ -25,15 +25,13 @@ public:
 	Ogre::Plane positionPlane;
 	Ogre::Plane aimPlane;
 
-//protected:
+	Ogre::SceneManager* sceneMgr;
+
+protected:
     void createScene();
     void createLighting();
     void createSky();
     void createPlayer();
-
-    Ogre::SceneManager* sceneMgr;
-
-    Ogre::Plane groundPlane;
 };
 
 #endif

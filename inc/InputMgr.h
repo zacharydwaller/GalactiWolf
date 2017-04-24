@@ -30,18 +30,16 @@ public:
 
     void loadLevel();
 
+	Entity* raycastToEntity();
+	Ogre::Vector3 raycastToPlane(Ogre::Plane plane);
+
+	OIS::Mouse* mouse;
+	OIS::Keyboard* keyboard;
+
 protected:
     void controlCamera(float deltaTime);
     void moveCamera(Ogre::Vector3 movement);
     void rotateCamera(float yaw, float pitch);
-
-    void controlShip(float deltaTime);
-
-    void processLeftClick();
-    void processRightClick();
-
-    Entity* raycastToEntity();
-    Ogre::Vector3 raycastToPlane(Ogre::Plane plane);
 
     void initializeOIS();
 
@@ -58,9 +56,6 @@ protected:
     Ogre::RenderWindow* window;
 
     OIS::InputManager* inputManager;
-    OIS::Mouse* mouse;
-    OIS::Keyboard* keyboard;
-
 };
 
 #endif

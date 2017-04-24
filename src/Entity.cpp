@@ -1,13 +1,17 @@
 #include <Engine.h>
 
+#include <Utils.h>
+
 #include <Entity.h>
 #include <Aspect.h>
 #include <UnitAI.h>
 
 unsigned int Entity::nextId = 0;
 
-Entity::Entity()
+Entity::Entity(Engine* newEngine)
 {
+	engine = newEngine;
+
 	// Set position/speed
 	position = Ogre::Vector3::ZERO;
 	heading = 0;
@@ -38,11 +42,29 @@ Entity::~Entity()
 
 void Entity::tick(float deltaTime)
 {
+	update(deltaTime);
+
     std::list<Aspect*>::iterator it;
     for (it = aspects->begin(); it != aspects->end(); it++)
     {
         (*it)->tick(deltaTime);
     }
+}
+
+void Entity::lookAt(Ogre::Vector3 lookAtPos)
+{
+	// TODO: Fix this
+	Ogre::Vector3 forward, up, right;
+
+	forward = lookAtPos - position;
+	forward.normalise();
+
+	//ogreSceneNode->setDirection(forward);
+	ogreSceneNode->lookAt(lookAtPos, Ogre::Node::TS_LOCAL);
+
+	rotation.x = ogreSceneNode->getOrientation().getRoll().valueDegrees();
+	rotation.y = ogreSceneNode->getOrientation().getYaw().valueDegrees();
+	rotation.z = ogreSceneNode->getOrientation().getRoll().valueDegrees();
 }
 
 void Entity::moveTo(Ogre::Vector3 location, bool addToCommandList)

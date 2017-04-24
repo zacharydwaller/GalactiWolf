@@ -25,6 +25,8 @@ public:
 
     bool tickAll(float deltaTime);
 
+	float time;
+
     GameMgr*    gameMgr;
     InputMgr*   inputMgr;
     EntityMgr*  entityMgr;

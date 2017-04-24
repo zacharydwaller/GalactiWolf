@@ -96,12 +96,7 @@ Entity* EntityMgr::getEntityBySceneNode(Ogre::SceneNode* sceneNode)
     return NULL;
 }
 
-Entity* EntityMgr::createEntity(Entity* entity)
-{
-	return createEntity(entity, Ogre::Vector3::ZERO, 0);
-}
-
-Entity* EntityMgr::createEntity(Entity* entity, Ogre::Vector3 position, Ogre::Real heading)
+Entity* EntityMgr::createEntity(Entity* entity, Ogre::Vector3 position, Ogre::Vector3 rotation)
 {
     char nameBuffer[128];
     Ogre::String entityName;
@@ -111,12 +106,12 @@ Entity* EntityMgr::createEntity(Entity* entity, Ogre::Vector3 position, Ogre::Re
 
     entity->entityName = entityName;
 
-    entity->ogreEntity = sceneMgr->createEntity(entity->meshFile);
+	entity->position = position;
+	entity->rotation = rotation;
 
+    entity->ogreEntity = sceneMgr->createEntity(entity->meshFile);
     entity->ogreSceneNode = sceneMgr->getRootSceneNode()->createChildSceneNode(entityName);
     entity->ogreSceneNode->attachObject(entity->ogreEntity);
-    entity->ogreSceneNode->setPosition(position);
-    entity->ogreSceneNode->rotate(Ogre::Vector3::UNIT_Y, (Ogre::Radian) Ogre::Math::DegreesToRadians(heading));
 
     entities->push_back(entity);
 

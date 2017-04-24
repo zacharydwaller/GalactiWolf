@@ -14,6 +14,7 @@ Engine::Engine()
     inputMgr = 0;
     entityMgr = 0;
     gameMgr = 0;
+	time = 0;
     keepRunning = true;
 
 }
@@ -50,6 +51,8 @@ void Engine::init()
 
 bool Engine::tickAll(float dt)
 {
+	time += dt;
+
     gfxMgr->tick(dt);
     inputMgr->tick(dt);
     entityMgr->tick(dt);
