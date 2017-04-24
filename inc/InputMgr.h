@@ -30,7 +30,7 @@ public:
 
     void loadLevel();
 
-	Entity* raycastToEntity();
+	std::vector<Entity*> raycastToEntities();
 	Ogre::Vector3 raycastToPlane(Ogre::Plane plane);
 
 	OIS::Mouse* mouse;

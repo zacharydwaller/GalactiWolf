@@ -156,9 +156,9 @@ void InputMgr::rotateCamera(float yaw, float pitch)
 }
 
 
-Entity* InputMgr::raycastToEntity()
+std::vector<Entity*> InputMgr::raycastToEntities()
 {
-    Entity* ret = NULL;
+    std::vector<Entity*> ret;
 
     Ogre::Real screenWidth  = engine->gfxMgr->getWindow()->getWidth();
     Ogre::Real screenHeight = engine->gfxMgr->getWindow()->getHeight();
@@ -182,13 +182,11 @@ Entity* InputMgr::raycastToEntity()
             && it->movable->getName() != ""
             && it->movable->getName() != camera->getName())
         {
-            ret =
-                engine->entityMgr->getEntityBySceneNode(it->movable->getParentSceneNode());
-            return ret;
+            ret.push_back(engine->entityMgr->getEntityBySceneNode(it->movable->getParentSceneNode()));
         }
     }
 
-    return NULL;
+    return ret;
 }
 
 Ogre::Vector3 InputMgr::raycastToPlane(Ogre::Plane plane)
