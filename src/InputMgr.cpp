@@ -2,6 +2,8 @@
 #include <Entity.h>
 #include <Engine.h>
 
+#include <Vector3Extensions.h>
+
 InputMgr::InputMgr(Engine* newEngine)
     : Mgr(newEngine),
     window(0),
@@ -72,10 +74,12 @@ bool InputMgr::tick(float deltaTime)
         rmbDownLastFrame = false;
     }
     
-    controlShip(deltaTime);
 	*/
 
+	controlShip(deltaTime);
 	controlCamera(deltaTime);
+
+	std::cout << "Test" << std::endl;
 
     return true;
 }
@@ -151,23 +155,16 @@ void InputMgr::rotateCamera(float yaw, float pitch)
 
 void InputMgr::controlShip(float deltaTime)
 {
-    Entity* selected = engine->entityMgr->getSelectedEntity();
+    Entity* player= engine->gameMgr->player;
+	Ogre::Vector3 posLocation = raycastToPlane(engine->gameMgr->positionPlane);
+	Ogre::Vector3 aimLocation = raycastToPlane(engine->gameMgr->aimPlane);
+	Ogre::Vector3 aimDiff = aimLocation - player->position;
+    
+	player->position = Vector3::lerp(player->position, posLocation, 0.01f);
 
-    // Forward / Backward
-    if (keyboard->isKeyDown(OIS::KC_UP))
-        selected->desiredSpeed += 10;
-    if (keyboard->isKeyDown(OIS::KC_DOWN))
-        selected->desiredSpeed -= 10;
-
-    selected->desiredSpeed =
-        std::max(selected->minSpeed,
-            std::min(selected->maxSpeed, selected->desiredSpeed));
-
-    // Heading
-    if (keyboard->isKeyDown(OIS::KC_LEFT))
-        selected->desiredHeading += 0.3f;
-    if (keyboard->isKeyDown(OIS::KC_RIGHT))
-        selected->desiredHeading -= 0.3f;
+	//player->ogreSceneNode->lookAt(aimLocation, Ogre::Node::TS_WORLD, Ogre::Vector3::UNIT_Y);
+	//player->ogreSceneNode->yaw(aimDiff.angleBetween(Ogre::Vector3::UNIT_Z));
+	//player->orientation = player->ogreSceneNode->getOrientation();
 }
 
 void InputMgr::processLeftClick()
@@ -182,7 +179,7 @@ void InputMgr::processLeftClick()
 void InputMgr::processRightClick()
 {
     Entity* targetEntity = raycastToEntity();
-    Ogre::Vector3 targetLocation = raycastToGround();
+    //Ogre::Vector3 targetLocation = raycastToGround();
     bool addToList = keyboard->isKeyDown(OIS::KC_LSHIFT);
 
     if (targetEntity != NULL)
@@ -191,7 +188,7 @@ void InputMgr::processRightClick()
     }
     else
     {
-        engine->entityMgr->getSelectedEntity()->moveTo(targetLocation, addToList);
+        //engine->entityMgr->getSelectedEntity()->moveTo(targetLocation, addToList);
     }
 }
 
@@ -230,7 +227,7 @@ Entity* InputMgr::raycastToEntity()
     return NULL;
 }
 
-Ogre::Vector3 InputMgr::raycastToGround()
+Ogre::Vector3 InputMgr::raycastToPlane(Ogre::Plane plane)
 {
     Ogre::Real screenWidth = engine->gfxMgr->getWindow()->getWidth();
     Ogre::Real screenHeight = engine->gfxMgr->getWindow()->getHeight();
@@ -241,7 +238,7 @@ Ogre::Vector3 InputMgr::raycastToGround()
 
     Ogre::Ray mouseRay = camera->getCameraToViewportRay(offsetX, offsetY);
 
-    std::pair<bool, float> result = mouseRay.intersects(engine->gameMgr->groundPlane);
+    std::pair<bool, float> result = mouseRay.intersects(plane);
 
     if (result.first)
     {

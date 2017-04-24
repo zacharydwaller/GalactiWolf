@@ -27,7 +27,7 @@ void Physics::tick(float newDeltaTime)
     deltaTime = newDeltaTime;
 
     updateSpeed();
-    updateHeading();
+    //updateHeading();
     updateVelocity();
     updatePosition();
 }
@@ -82,8 +82,7 @@ Renderer::Renderer(Entity* newEntity)
 void Renderer::tick(float deltaTime)
 {
     entity->ogreSceneNode->setPosition(entity->position);
-    entity->ogreSceneNode->setOrientation(Ogre::Quaternion::IDENTITY);
-    entity->ogreSceneNode->yaw(Ogre::Radian(entity->heading * Utils::degToRad));
+    entity->ogreSceneNode->setOrientation(entity->orientation);
 
     if (entity->isSelected)
         entity->ogreSceneNode->showBoundingBox(true);

@@ -61,6 +61,35 @@ void GameMgr::createSky()
 
 void GameMgr::createPlayer()
 {
+	// Create player entity
     EntityMgr* entityMgr = engine->entityMgr;
 	player = entityMgr->createEntity(new Player());
+
+	// Create position plane
+	positionPlane = Ogre::Plane(Ogre::Vector3::NEGATIVE_UNIT_Z, 0);
+	Ogre::MeshManager::getSingleton().createPlane(
+		"PositionPlane",
+		Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+		positionPlane,
+		10000, 10000);
+	Ogre::Entity* posPlaneEnt = sceneMgr->createEntity("PositionPlane");
+	Ogre::SceneNode* posPlaneSceneNode = sceneMgr->getRootSceneNode()->createChildSceneNode();
+	posPlaneSceneNode->attachObject(posPlaneEnt);
+	posPlaneEnt->setMaterialName("Examples/GrassFloor");
+	posPlaneSceneNode->setPosition(0, 0, 0);
+	//posPlaneEnt->setVisible(false);
+
+	// Create aim plane
+	aimPlane = Ogre::Plane(Ogre::Vector3::NEGATIVE_UNIT_Z, 0);
+	Ogre::MeshManager::getSingleton().createPlane(
+		"AimPlane",
+		Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+		aimPlane,
+		10000, 10000);
+	Ogre::Entity* aimPlaneEnt = sceneMgr->createEntity("AimPlane");
+	Ogre::SceneNode* aimPlaneSceneNode = sceneMgr->getRootSceneNode()->createChildSceneNode();
+	aimPlaneSceneNode->attachObject(aimPlaneEnt);
+	aimPlaneEnt->setMaterialName("Examples/GrassFloor");
+	aimPlaneSceneNode->setPosition(0, 0, 5000);
+	//aimPlaneEnt->setVisible(false);
 }

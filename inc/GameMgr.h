@@ -22,6 +22,8 @@ public:
     void loadLevel();
 
 	Entity* player;
+	Ogre::Plane positionPlane;
+	Ogre::Plane aimPlane;
 
 //protected:
     void createScene();

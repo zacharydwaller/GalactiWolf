@@ -36,6 +36,7 @@ public:
 
     // Ogre
     Ogre::Vector3 position;
+	Ogre::Quaternion orientation;
     Ogre::Vector3 velocity;
     Ogre::SceneNode* ogreSceneNode;
     Ogre::Entity* ogreEntity;

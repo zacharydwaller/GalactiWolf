@@ -41,7 +41,7 @@ protected:
     void processRightClick();
 
     Entity* raycastToEntity();
-    Ogre::Vector3 raycastToGround();
+    Ogre::Vector3 raycastToPlane(Ogre::Plane plane);
 
     void initializeOIS();
 
