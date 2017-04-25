@@ -1,3 +1,5 @@
+#include <vector>
+
 #include <Player.h>
 
 #include <Utils.h>
@@ -28,14 +30,8 @@ void Player::update(float deltaTime)
 void Player::controlShip(float deltaTime)
 {
 	Ogre::Vector3 posLocation = input->raycastToPlane(engine->gameMgr->positionPlane);
-	Ogre::Vector3 aimLocation = input->raycastToPlane(engine->gameMgr->aimPlane);
-	Ogre::Vector3 aimDiff = aimLocation - position;
-
+	
 	position = Utils::lerp(position, posLocation, 0.01f);
-
-	//ogreSceneNode->lookAt(aimLocation, Ogre::Node::TS_WORLD, Ogre::Vector3::UNIT_Z);
-	ogreSceneNode->setDirection(aimDiff, Ogre::Node::TS_WORLD, Ogre::Vector3::UNIT_Z);
-
 	//player->ogreSceneNode->lookAt(aimLocation, Ogre::Node::TS_WORLD, Ogre::Vector3::UNIT_Y);
 	//player->ogreSceneNode->yaw(aimDiff.angleBetween(Ogre::Vector3::UNIT_Z));
 	//player->orientation = player->ogreSceneNode->getOrientation();
@@ -43,4 +39,29 @@ void Player::controlShip(float deltaTime)
 
 void Player::shoot()
 {
+	Ogre::Vector3 aimLocation = position + Ogre::Vector3(0, 0, 1000);
+	Ogre::Vector3 aimDiff = aimLocation - position;
+
+	// See if player trying to aim at an enemy
+	/*
+	std::vector<Entity*> entities = input->raycastToEntities();
+	if(entities.size() > 0)
+	{
+		// Player might be in entities list, so skip
+		// Entities sorted by distance, so we will aim at closest in raycast
+		int i = 0;
+		if(entities[0]->entityId != entityId)
+		{
+			i++;
+		}
+
+		// Aim at entity
+		if(i < entities.size())
+		{
+			aimLocation = entities[i]->position;
+		}
+	}
+	*/
+
+	ogreSceneNode->lookAt(aimLocation, Ogre::Node::TS_WORLD, Ogre::Vector3::UNIT_Z);
 }

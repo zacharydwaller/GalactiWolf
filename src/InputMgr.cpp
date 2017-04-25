@@ -45,11 +45,6 @@ bool InputMgr::tick(float deltaTime)
         return false;
     }
 
-	//if(mouse->getMouseState().buttonDown(OIS::MB_Left))
-	{
-		//engine->gameMgr->player->rotation.x += 180;
-	}
-
 	/*
     if (keyboard->isKeyDown(OIS::KC_TAB) && !tabDownLastFrame)
     {
