@@ -1,7 +1,7 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
-#include <list>
+#include <vector>
 
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
@@ -19,6 +19,7 @@ public:
 
     virtual void tick(float deltaTime);
 
+	virtual void awake() = 0;
 	virtual void update(float deltaTime) = 0;
 
 	virtual void lookAt(Ogre::Vector3 lookAtPos);
@@ -34,6 +35,9 @@ public:
     unsigned int entityId;
     std::string meshFile;
 
+	bool isDestroyed;
+	bool isEnemy;
+
     // Dynamic
     float speed, heading;
     float desiredSpeed, desiredHeading;
@@ -42,15 +46,16 @@ public:
 
     // Ogre
     Ogre::Vector3 position;
-	Ogre::Vector3 rotation;
+	Ogre::Vector3 direction;
     Ogre::Vector3 velocity;
     Ogre::SceneNode* ogreSceneNode;
     Ogre::Entity* ogreEntity;
 
-    std::list<Aspect*>* aspects;
+    std::vector<Aspect*>* aspects;
     UnitAI* unitAI;
 
 	Engine* engine;
+
 
 private:
     static unsigned int nextId;

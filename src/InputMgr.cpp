@@ -184,7 +184,7 @@ std::vector<Entity*> InputMgr::raycastToEntities()
     return ret;
 }
 
-Ogre::Vector3 InputMgr::raycastToPlane(Ogre::Plane plane)
+Ogre::Vector3 InputMgr::raycastToPlane(Ogre::Plane plane, float offset)
 {
     Ogre::Real screenWidth = engine->gfxMgr->getWindow()->getWidth();
     Ogre::Real screenHeight = engine->gfxMgr->getWindow()->getHeight();
@@ -199,7 +199,7 @@ Ogre::Vector3 InputMgr::raycastToPlane(Ogre::Plane plane)
 
     if (result.first)
     {
-        return mouseRay.getPoint(result.second);
+        return mouseRay.getPoint(result.second + offset);
     }
 }
 

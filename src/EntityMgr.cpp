@@ -27,9 +27,12 @@ void EntityMgr::stop()
 bool EntityMgr::tick(float deltaTime)
 {
     std::vector<Entity*>::iterator it;
-    for (it = entities->begin(); it != entities->end(); it++)
+	for(int i = entities->size() - 1; i >= 0; i--)
     {
-        (*it)->tick(deltaTime);
+        //(*it)->tick(deltaTime);
+		if(i >= entities->size()) continue;
+
+		entities->at(i)->tick(deltaTime);
     }
 
     return true;
@@ -96,7 +99,7 @@ Entity* EntityMgr::getEntityBySceneNode(Ogre::SceneNode* sceneNode)
     return NULL;
 }
 
-Entity* EntityMgr::createEntity(Entity* entity, Ogre::Vector3 position, Ogre::Vector3 rotation)
+Entity* EntityMgr::createEntity(Entity* entity, Ogre::Vector3 position, Ogre::Vector3 direction)
 {
     char nameBuffer[128];
     Ogre::String entityName;
@@ -107,13 +110,39 @@ Entity* EntityMgr::createEntity(Entity* entity, Ogre::Vector3 position, Ogre::Ve
     entity->entityName = entityName;
 
 	entity->position = position;
-	entity->rotation = rotation;
+	entity->direction = direction;
 
     entity->ogreEntity = sceneMgr->createEntity(entity->meshFile);
     entity->ogreSceneNode = sceneMgr->getRootSceneNode()->createChildSceneNode(entityName);
     entity->ogreSceneNode->attachObject(entity->ogreEntity);
 
+	entity->ogreSceneNode->setPosition(position);
+
     entities->push_back(entity);
 
+	entity->awake();
+
     return entity;
+}
+
+void EntityMgr::removeEntity(Entity* entity)
+{
+	for(int i = entities->size() - 1; i >= 0; i--)
+	{
+		if(entity->entityId == entities->at(i)->entityId)
+		{
+			Ogre::String name = entities->at(i)->ogreSceneNode->getName();
+
+			entity->isDestroyed = true;
+			entities->erase(entities->begin() + i);
+
+			if(entity == engine->gameMgr->player)
+			{
+				engine->gameMgr->player = NULL;
+			}
+
+			sceneMgr->getRootSceneNode()->removeAndDestroyChild(name);
+			delete entity;
+		}
+	}
 }

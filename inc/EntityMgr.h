@@ -31,7 +31,8 @@ public:
 
     Entity* getEntityBySceneNode(Ogre::SceneNode* sceneNode);
 
-    Entity* createEntity(Entity* entity, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Vector3 rotation = Ogre::Vector3::ZERO);
+    Entity* createEntity(Entity* entity, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Vector3 direction = Ogre::Vector3::UNIT_Z);
+	void removeEntity(Entity* entity);
 
 protected:
     int selectedEntityIndex;

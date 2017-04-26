@@ -11,6 +11,7 @@ unsigned int Entity::nextId = 0;
 Entity::Entity(Engine* newEngine)
 {
 	engine = newEngine;
+	isDestroyed = false;
 
 	// Set position/speed
 	position = Ogre::Vector3::ZERO;
@@ -26,7 +27,7 @@ Entity::Entity(Engine* newEngine)
 	entityId = Entity::nextId++;
 
 	// Initialize aspects
-	aspects = new std::list<Aspect*>();
+	aspects = new std::vector<Aspect*>();
 	aspects->push_back(new Physics(this));
 	aspects->push_back(new Renderer(this));
 
@@ -38,33 +39,29 @@ Entity::~Entity()
 {
     aspects->clear();
     delete aspects;
+	aspects = NULL;
 }
 
 void Entity::tick(float deltaTime)
 {
 	update(deltaTime);
 
-    std::list<Aspect*>::iterator it;
-    for (it = aspects->begin(); it != aspects->end(); it++)
+	if(isDestroyed) return;
+    for (int i = aspects->size() - 1; i >= 0; i--)
     {
-        (*it)->tick(deltaTime);
+        aspects->at(i)->tick(deltaTime);
     }
 }
 
 void Entity::lookAt(Ogre::Vector3 lookAtPos)
 {
 	// TODO: Fix this
-	Ogre::Vector3 forward, up, right;
+	Ogre::Vector3 forward;
 
 	forward = lookAtPos - position;
 	forward.normalise();
 
-	//ogreSceneNode->setDirection(forward);
-	ogreSceneNode->lookAt(lookAtPos, Ogre::Node::TS_LOCAL);
-
-	rotation.x = ogreSceneNode->getOrientation().getRoll().valueDegrees();
-	rotation.y = ogreSceneNode->getOrientation().getYaw().valueDegrees();
-	rotation.z = ogreSceneNode->getOrientation().getRoll().valueDegrees();
+	direction = forward;
 }
 
 void Entity::moveTo(Ogre::Vector3 location, bool addToCommandList)

@@ -8,6 +8,7 @@ class Player : public Entity
 public:
 	Player(Engine* engine);
 
+	void awake();
 	void update(float deltaTime);
 
 	void controlShip(float deltaShip);

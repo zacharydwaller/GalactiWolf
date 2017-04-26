@@ -42,13 +42,8 @@ Renderer::Renderer(Entity* newEntity)
 void Renderer::tick(float deltaTime)
 {
     entity->ogreSceneNode->setPosition(entity->position);
-	/*
-    entity->ogreSceneNode->setOrientation(Ogre::Quaternion::IDENTITY);
+	entity->ogreSceneNode->setDirection(entity->direction, Ogre::Node::TS_WORLD, Ogre::Vector3::UNIT_Z);
 
-	entity->ogreSceneNode->pitch((Ogre::Radian) entity->rotation.x * Utils::degToRad);
-	entity->ogreSceneNode->yaw((Ogre::Radian) entity->rotation.y * Utils::degToRad);
-	entity->ogreSceneNode->roll((Ogre::Radian) entity->rotation.z * Utils::degToRad);
-	*/
     if (entity->isSelected)
         entity->ogreSceneNode->showBoundingBox(true);
     else

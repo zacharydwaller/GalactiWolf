@@ -4,10 +4,16 @@
 #include <Player.h>
 #include <Enemy.h>
 
+#include <stdlib.h>
+#include <time.h>
+
 GameMgr::GameMgr(Engine* newEngine)
     : Mgr(newEngine)
 {
+	srand(time(NULL));
 
+	enemySpawnDelay = 1.0f;
+	nextEnemySpawn = 1.0f;
 }
 
 GameMgr::~GameMgr()
@@ -27,6 +33,21 @@ void GameMgr::stop()
 
 bool GameMgr::tick(float deltaTime)
 {
+	enemySpawnDelay -= 0.01f * deltaTime;
+	if(enemySpawnDelay <= 0.25) enemySpawnDelay = 0.25;
+
+	if(player != NULL)
+	{
+		if(engine->time >= nextEnemySpawn)
+		{
+			nextEnemySpawn = engine->time + enemySpawnDelay;
+
+			Ogre::Vector3 pos(-2500 + (rand() % 5000), -100 + (rand() % 2000), 5000);
+
+			engine->entityMgr->createEntity(new Enemy(engine), pos);
+		}
+	}
+	
     return true;
 }
 
@@ -65,11 +86,6 @@ void GameMgr::createPlayer()
 	// Create player entity
     EntityMgr* entityMgr = engine->entityMgr;
 	player = entityMgr->createEntity(new Player(engine));
-
-	// Create test enemy
-	Entity* enemy = entityMgr->createEntity(new Enemy(engine), Ogre::Vector3(0, 0, 5000));
-	enemy->ogreSceneNode->scale(5, 5, 5);
-
 
 	// Create position plane
 	positionPlane = Ogre::Plane(Ogre::Vector3::NEGATIVE_UNIT_Z, 0);

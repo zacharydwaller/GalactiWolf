@@ -31,7 +31,7 @@ public:
     void loadLevel();
 
 	std::vector<Entity*> raycastToEntities();
-	Ogre::Vector3 raycastToPlane(Ogre::Plane plane);
+	Ogre::Vector3 raycastToPlane(Ogre::Plane plane, float offset = 0);
 
 	OIS::Mouse* mouse;
 	OIS::Keyboard* keyboard;

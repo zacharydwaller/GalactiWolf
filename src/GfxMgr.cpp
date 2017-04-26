@@ -136,7 +136,7 @@ void GfxMgr::createCamera()
 {
 	camera = sceneMgr->createCamera("PlayerCam");
 
-	camera->setPosition(Ogre::Vector3(0, 0, -500));
+	camera->setPosition(Ogre::Vector3(0, 0, -1000));
 	camera->lookAt(Ogre::Vector3(0, 0, 0));
 
 	camera->setNearClipDistance(5);

@@ -21,6 +21,9 @@ public:
 
     void loadLevel();
 
+	float enemySpawnDelay;
+	float nextEnemySpawn;
+
 	Entity* player;
 	Ogre::Plane positionPlane;
 	Ogre::Plane aimPlane;
