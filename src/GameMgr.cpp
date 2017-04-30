@@ -31,6 +31,7 @@ void GameMgr::stop()
 
 }
 
+
 bool GameMgr::tick(float deltaTime)
 {
 	enemySpawnDelay -= 0.01f * deltaTime;
