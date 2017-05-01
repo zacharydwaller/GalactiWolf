@@ -24,6 +24,13 @@ public:
 
 	virtual void lookAt(Ogre::Vector3 lookAtPos);
 
+	virtual void takeDamage(float amount);
+
+	// Deletes this instance but code still runs - unsafe
+	// Should be the last statement in a function or
+	// have a return immediately after
+	virtual void die();
+
     virtual void moveTo(Ogre::Vector3 location, bool addToCommandList = false);
     virtual void follow(Entity* target, bool addToCommandList = false);
 
@@ -39,6 +46,7 @@ public:
 	bool isEnemy;
 
     // Dynamic
+	float health;
     float speed, heading;
     float desiredSpeed, desiredHeading;
 

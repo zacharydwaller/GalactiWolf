@@ -7,6 +7,12 @@ Enemy::Enemy(Engine* newEngine)
 {
 	meshFile = "RZR-002.mesh";
 
+	health = 100;
+	damage = 25;
+
+	acceleration = 500;
+	rotationSpeed = 10;
+
 	maxSpeed = 1000;
 
 	size = 100;
@@ -18,20 +24,31 @@ Enemy::Enemy(Engine* newEngine)
 void Enemy::awake()
 {
 	ogreSceneNode->scale(5, 5, 5);
+
+	Entity* player = engine->gameMgr->player;
+	if(player != NULL)
+	{
+		lookAt(player->position);
+	}
 }
 
 void Enemy::update(float deltaTime)
 {
 	Entity* player = engine->gameMgr->player;
+
 	if(player != NULL)
 	{
-		lookAt(player->position);
-		checkCollisions();
-	}
+		if(checkCollisions())
+		{
+			die();
+			return;
+		}
 
-	if(direction.angleBetween(Ogre::Vector3::NEGATIVE_UNIT_Z).valueDegrees() <= 75)
-	{
-		velocity = Utils::lerp(velocity, direction * maxSpeed, 0.01);
+		if(direction.angleBetween(Ogre::Vector3::NEGATIVE_UNIT_Z).valueDegrees() <= 75)
+		{
+			lookAt(player->position);
+			velocity = Utils::MoveTo(velocity, direction * maxSpeed, acceleration * deltaTime);
+		}
 	}
 
 	direction = velocity.normalisedCopy();
@@ -39,24 +56,28 @@ void Enemy::update(float deltaTime)
 	lifetime -= deltaTime;
 	if(lifetime <= 0)
 	{
-		engine->entityMgr->removeEntity(this);
+		die();
+		return;
 	}
+
 }
 
-void Enemy::checkCollisions()
+bool Enemy::checkCollisions()
 {
 	std::vector<Entity*>* entities = engine->entityMgr->getEntityList();
 
 	for(int i = entities->size() - 1; i >= 0; i--)
 	{
+		// If hit player
 		if(entities->at(i)->isEnemy == false)
 		{
 			if(position.squaredDistance(entities->at(i)->position) <= size*size)
 			{
-				engine->entityMgr->removeEntity(entities->at(i));
-				lifetime = 0;
-				return;
+				entities->at(i)->takeDamage(damage);
+				return true;
 			}
 		}
 	}
+
+	return false;
 }

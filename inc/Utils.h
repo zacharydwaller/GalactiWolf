@@ -46,6 +46,20 @@ namespace Utils
 	{
 		return ((1 - t) * start) + (t * end);
 	}
+
+	inline Ogre::Vector3 MoveTo(Ogre::Vector3 start, Ogre::Vector3 end, float speed)
+	{
+		float dist = start.distance(end);
+
+		if(dist <= speed)
+		{
+			return end;
+		}
+		else
+		{
+			return start + (((end - start) / dist) * speed);
+		}
+	}
 } /* namespace Utils */
 
 #endif /* UTILS_H_ */

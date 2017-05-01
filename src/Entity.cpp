@@ -55,13 +55,28 @@ void Entity::tick(float deltaTime)
 
 void Entity::lookAt(Ogre::Vector3 lookAtPos)
 {
-	// TODO: Fix this
 	Ogre::Vector3 forward;
 
 	forward = lookAtPos - position;
 	forward.normalise();
 
 	direction = forward;
+}
+
+void Entity::takeDamage(float amount)
+{
+	health -= amount;
+
+	if(health <= 0)
+	{
+		die();
+	}
+}
+
+void Entity::die()
+{
+	engine->entityMgr->removeEntity(this);
+	isDestroyed = true;
 }
 
 void Entity::moveTo(Ogre::Vector3 location, bool addToCommandList)

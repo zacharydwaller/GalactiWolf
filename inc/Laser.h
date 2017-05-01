@@ -8,14 +8,17 @@
 class Laser : public Entity
 {
 public:
-	Laser(Engine* newEngine);
+	Laser(Engine* newEngine, float newDamage);
 
 	void awake();
 	void update(float deltaTime);
 
-	void checkCollisions();
+	// Returns true if hit something
+	bool checkCollisions();
 
 	void setVelocityDirection(Ogre::Vector3 newDirection);
+
+	float damage;
 
 	float size;
 	float speed;

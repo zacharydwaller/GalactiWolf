@@ -14,6 +14,14 @@ public:
 	void controlShip(float deltaShip);
 	void shoot();
 
+	void die();
+
+	float damage;
+
+	float speed;
+
+	int extraLives;
+
 	float fireDelay;
 	float nextFire;
 

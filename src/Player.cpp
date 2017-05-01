@@ -10,6 +10,13 @@ Player::Player(Engine* newEngine)
 {
 	input = engine->inputMgr;
 
+	health = 100;
+	damage = 35;
+
+	speed = 1500;
+
+	extraLives = 2;
+
 	fireDelay = 0.2f;
 	nextFire = 0.0f;
 
@@ -42,12 +49,28 @@ void Player::controlShip(float deltaTime)
 
 	lookAt(aimLocation);
 	
-	position = Utils::lerp(position, posLocation, 0.01f);
+	position = Utils::lerp(position, posLocation, (speed / 1000.0f) * deltaTime);
 	//position = Utils::lerp(position, posLocation, 0.025f);
+	//position = Utils::SmoothDamp(position, posLocation, speed * deltaTime);
 }
 
 void Player::shoot()
 {
-	Laser* laser = (Laser*) engine->entityMgr->createEntity(new Laser(engine), position, direction);
+	Laser* laser = (Laser*) engine->entityMgr->createEntity(new Laser(engine, damage), position, direction);
 	laser->isEnemy = false;
+}
+
+void Player::die()
+{
+	if(extraLives == 0)
+	{
+		// Game over
+		engine->entityMgr->removeEntity(this);
+		isDestroyed = true;
+	}
+	else
+	{
+		extraLives--;
+		health = 100;
+	}
 }

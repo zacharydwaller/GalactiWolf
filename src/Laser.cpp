@@ -2,10 +2,12 @@
 
 #include <vector>
 
-Laser::Laser(Engine* newEngine)
+Laser::Laser(Engine* newEngine, float newDamage)
 	: Entity(newEngine)
 {
 	meshFile = "sphere.mesh";
+
+	damage = newDamage;
 
 	size = 100;
 	speed = 4000.0f;
@@ -21,17 +23,22 @@ void Laser::update(float deltaTime)
 {
 	velocity = direction * speed;
 
-	checkCollisions();
+	if(checkCollisions())
+	{
+		die();
+		return;
+	}
 
 	lifetime -= deltaTime;
 
 	if(lifetime <= 0)
 	{
-		engine->entityMgr->removeEntity(this);
+		die();
+		return;
 	}
 }
 
-void Laser::checkCollisions()
+bool Laser::checkCollisions()
 {
 	std::vector<Entity*>* entities = engine->entityMgr->getEntityList();
 
@@ -39,14 +46,17 @@ void Laser::checkCollisions()
 	{
 		if(isEnemy != entities->at(i)->isEnemy)
 		{
+			// Hit enemy or player
 			if(position.squaredDistance(entities->at(i)->position) <= size*size)
 			{
-				engine->entityMgr->removeEntity(entities->at(i));
-				lifetime = 0;
-				return;
+				entities->at(i)->takeDamage(damage);
+				
+				return true;
 			}
 		}
 	}
+
+	return false;
 }
 
 void Laser::setVelocityDirection(Ogre::Vector3 newDirection)
