@@ -26,6 +26,14 @@ void InputMgr::init()
 
 void InputMgr::stop()
 {
+	if(inputManager)
+	{
+		inputManager->destroyInputObject(mouse);
+		inputManager->destroyInputObject(keyboard);
+		OIS::InputManager::destroyInputSystem(inputManager);
+		inputManager = NULL;
+	}
+
     Ogre::WindowEventUtilities::removeWindowEventListener(window, this);
     windowClosed(window);
 }
