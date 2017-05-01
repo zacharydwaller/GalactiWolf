@@ -5,6 +5,7 @@
 #include <InputMgr.h>
 #include <EntityMgr.h>
 #include <GameMgr.h>
+#include <UiMgr.h>
 
 class GameMgr;
 class InputMgr;
@@ -27,6 +28,7 @@ public:
 
 	float time;
 
+	UiMgr*		uiMgr;
     GameMgr*    gameMgr;
     InputMgr*   inputMgr;
     EntityMgr*  entityMgr;

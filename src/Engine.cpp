@@ -37,16 +37,21 @@ void Engine::init()
     inputMgr = new InputMgr(this);
     entityMgr = new EntityMgr(this);
     gameMgr = new GameMgr(this);
+	//uiMgr = new UiMgr(this);
+
     // initialize
     gfxMgr->init();
     inputMgr->init();
     entityMgr->init();
     gameMgr->init();
+	//uiMgr->init();
+
     // load level to play
     gfxMgr->loadLevel();
     inputMgr->loadLevel();
     entityMgr->loadLevel();
     gameMgr->loadLevel();
+	//uiMgr->loadLevel();
 }
 
 bool Engine::tickAll(float dt)
@@ -57,6 +62,7 @@ bool Engine::tickAll(float dt)
     inputMgr->tick(dt);
     entityMgr->tick(dt);
     gameMgr->tick(dt);
+	//uiMgr->tick(dt);
 
     return true;
 }
@@ -67,6 +73,7 @@ void Engine::shutdown()
     gfxMgr->stop();
     entityMgr->stop();
     gameMgr->stop();
+	//uiMgr->stop();
 }
 void Engine::run()
 {
